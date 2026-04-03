@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write   # IMPORTANT FIX
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -12,14 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create Tag
+      - name: Generate Tag
         id: tag
-        run: echo "TAG=v1.$(date +'%s')" >> $GITHUB_OUTPUT
+        run: echo "TAG=v1.$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2   # UPDATED VERSION
         with:
           tag_name: ${{ steps.tag.outputs.TAG }}
-          name: Auto Release ${{ steps.tag.outputs.TAG }}
+          name: Release ${{ steps.tag.outputs.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
